@@ -3,7 +3,7 @@
 #include <fstream>
 #include <filesystem>
 #include <sstream>
-#include <iomanip> // for setw and alignment
+#include <iomanip> 
 
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
@@ -19,6 +19,7 @@ static cl::opt<std::string> InputIR("input", cl::desc("input LLVM IR (.ll/.bc)")
 static cl::opt<std::string> OutDir("outdir", cl::desc("output directory"), cl::init("opt_out"));
 static cl::opt<std::string> PassList("passes", cl::desc("comma-separated pass names"), cl::init("mem2reg,instcombine,gvn"));
 
+
 int main(int argc, char **argv) {
   cl::ParseCommandLineOptions(argc, argv, "opt_ledger - per-pass recorder\n");
 
@@ -30,7 +31,6 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  // ensure output directory exists
   fs::create_directories(fs::path(OutDir.getValue()));
 
   PassRunner runner(*M, OutDir.getValue());
@@ -43,21 +43,23 @@ int main(int argc, char **argv) {
   }
 
   std::vector<PassEntry> entries;
+  int idx = 0;
   for (auto &p : passes) {
     PassEntry e;
     e.name = p;
-    e.before_path = e.after_path = "";
-    e.before_instr = e.after_instr = e.before_funcs = e.after_funcs = 0;
-    e.before_bbs = e.after_bbs = e.before_size = e.after_size = 0;
+
+    e.before_path = OutDir.getValue() + "/" + std::to_string(idx) + "_before_" + p + ".ll";
+    e.after_path  = OutDir.getValue() + "/" + std::to_string(idx) + "_after_" + p + ".ll";
 
     if (!runner.runPass(p, e)) {
       errs() << "Skipping pass: " << p << "\n";
       continue;
     }
+
     entries.push_back(e);
+    idx++;
   }
 
-  // JSON ledger
   std::string ledgerPath = OutDir.getValue() + "/ledger.json";
   std::ofstream out(ledgerPath);
   out << "[\n";
@@ -80,14 +82,12 @@ int main(int argc, char **argv) {
   out << "]\n";
   out.close();
 
-  // Table ledger with clean formatting
   std::string tablePath = OutDir.getValue() + "/ledger_table.txt";
   std::ofstream tout(tablePath);
 
   const int wName = 18;
   const int wCol  = 12;
 
-  // header
   tout << std::left
        << std::setw(wName) << "Pass"
        << std::setw(wCol)  << "InstrBefore"
@@ -105,7 +105,6 @@ int main(int argc, char **argv) {
        << "\n";
   tout << std::string(wName + wCol * 12, '-') << "\n";
 
-  // rows
   for (auto &E : entries) {
     long dInstr = static_cast<long>(E.after_instr) - static_cast<long>(E.before_instr);
     long dFuncs = static_cast<long>(E.after_funcs) - static_cast<long>(E.before_funcs);

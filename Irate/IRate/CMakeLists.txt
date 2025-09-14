@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(opt_ledger LANGUAGES C CXX)
+project(irate LANGUAGES C CXX)
 
 find_package(LLVM REQUIRED CONFIG)
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
@@ -14,11 +14,11 @@ add_definitions(${LLVM_DEFINITIONS})
 
 llvm_map_components_to_libnames(llvm_libs support core irreader passes)
 
-add_executable(opt_ledger
+add_executable(IRate
   src/main.cpp
   src/PassRunner.cpp
   src/Utils.cpp
 )
 
-target_include_directories(opt_ledger PRIVATE include ${LLVM_INCLUDE_DIRS})
-target_link_libraries(opt_ledger PRIVATE ${llvm_libs})
+target_include_directories(IRate PRIVATE include ${LLVM_INCLUDE_DIRS})
+target_link_libraries(IRate PRIVATE ${llvm_libs})

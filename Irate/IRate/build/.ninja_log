@@ -1,5 +1,0 @@
-# ninja log v5
-1	846	1757785702494030495	CMakeFiles/opt_ledger.dir/src/Utils.cpp.o	6f53c4d750331ba
-0	1189	1757785702838010571	CMakeFiles/opt_ledger.dir/src/main.cpp.o	38ca0b456f3cc94f
-1	3245	1757785704897891669	CMakeFiles/opt_ledger.dir/src/PassRunner.cpp.o	410aee3aa88f3d6c
-3245	4214	1757785705857836476	opt_ledger	d95c162b67d5896c

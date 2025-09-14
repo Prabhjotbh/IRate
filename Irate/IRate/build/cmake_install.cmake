@@ -1,4 +1,4 @@
-# Install script for directory: /home/prabhjot/IRate/opt_ledger
+# Install script for directory: /home/prabhjot/IRate/Irate/IRate
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/prabhjot/IRate/opt_ledger/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/prabhjot/IRate/Irate/IRate/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
